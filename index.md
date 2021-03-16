@@ -7,4 +7,4 @@ int main() {
 }
 ```
 
-**not work**
+[more](more.md)
