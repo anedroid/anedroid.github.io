@@ -2,7 +2,7 @@
 
 ### [System plików Linuxa](system-plików-linuxa.md)
 
-17.03.2021
+*17.03.2021*
 
 > System plików Linuxa to jedno z najważniejszych zagadnień niezbędnych do opanowania aby sprawnie poruszać się po systemie. I jest trochę bardziej złożone zagadnienie niż mogłoby się wydawać, dlatego postaram się je w miarę jasno wytłumaczyć.
 
