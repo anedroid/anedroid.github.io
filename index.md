@@ -26,7 +26,7 @@ Wybierzcie urządzenie i obraz dysku. Najczęściej pozostałe opcje możecie po
 
 # Instalacja GNU/Linuxa
 
-Instalator powinien wystartować automatycznie. Jeżeli jednak tak się nie stało, jeszcze raz zrestartujcie komputer, i w chwili gdy będzie się wyświetlać motherboard naciskajcie klawisz uruchamiający boot menu. Najczęściej będzie to F12, ale może się różnić w zależności od modelu komputera. Wystarczy sprawdzić w internecie, na przykład tu: https://pl.wikipedia.org/wiki/Program_rozruchowy.
+Instalator powinien wystartować automatycznie. Jeżeli jednak tak się nie stało, jeszcze raz zrestartujcie komputer, i w chwili gdy będzie się wyświetlać motherboard naciskajcie klawisz uruchamiający boot menu. Najczęściej będzie to F12, ale może się różnić w zależności od modelu komputera. Wystarczy sprawdzić w internecie, na przykład tu: [https://pl.wikipedia.org/wiki/Program_rozruchowy](https://pl.wikipedia.org/wiki/Program_rozruchowy).
 
 ![boot menu](https://cdn1.expertreviews.co.uk/sites/expertreviews/files/2015/08/boot_menu.png?itok=puiPdZ7b)
 
