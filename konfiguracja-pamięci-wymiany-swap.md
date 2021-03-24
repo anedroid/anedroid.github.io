@@ -99,15 +99,16 @@ Niezależnie od tego, którą wersję rozszerzenia pamięci wybierzemy, przy akt
 # device; this may be used with UUID= as a more robust way to name devices
 # that works even if disks are added and removed. See fstab(5).
 #
-# <file system>								<mount point>	<type>	<options>			<dump> <pass>
-UUID=e889109b-d785-43d8-838d-5a629e888970	/				ext4	errors=remount-ro	0		1
-/dev/sda7                               	/ubuntu			ext4	defaults			0		2
-#UUID=7fc1c01c-7a95-40ca-bfba-82041e77506e	/boot			ext4	defaults			0		2
-#UUID=fdae9e72-6b44-4a66-a36a-4d59d2bd25ce	/boot			ext4	defaults			0		2
-UUID=fdae9e72-6b44-4a66-a36a-4d59d2bd25ce	/boot			ext4	defaults			0		2
-/swapfile								none			swap	sw					0		0
-/dev/sda6								none			swap	sw					0		0
+# <file system>					<mount point>	<type>	<options>		<dump>	<pass>
+UUID=e889109b-d785-43d8-838d-5a629e888970	/		ext4	errors=remount-ro	0	1
+/dev/sda7                               	/ubuntu		ext4	defaults		0	2
+#UUID=7fc1c01c-7a95-40ca-bfba-82041e77506e	/boot		ext4	defaults		0	2
+#UUID=fdae9e72-6b44-4a66-a36a-4d59d2bd25ce	/boot		ext4	defaults		0	2
+UUID=fdae9e72-6b44-4a66-a36a-4d59d2bd25ce	/boot		ext4	defaults		0	2
+/swapfile					none		swap	sw			0	0
+/dev/sda6					none		swap	sw			0	0
 # / was on /dev/sda5 during installation
+
 ```
 
 Otwórzcie plik w dowolnym edytorze kodu, na przykład nano:
