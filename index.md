@@ -1,5 +1,5 @@
 ## Ostatnie artykuły
-[![icon](images/rss-icon.svg) RSS](feed.xml)
+<a href="feed.xml" download>![icon](images/rss-icon.svg)</a><a href="feed.xml" download>RSS</a>
 
 ### [Konfiguracja pamięci wymiany (swap)](konfiguracja-pamięci-wymiany-swap.md)
 
