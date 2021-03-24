@@ -92,7 +92,7 @@ Następnie uruchomcie program do zarządzania partycjami lub jeżeli takiego nie
 
 Niezależnie od tego, którą wersję rozszerzenia pamięci wybierzemy, przy aktualnej konfiguracji przy każdym uruchomieniu systemu będziemy musieli włączać swap komendą: `sudo swapon [adres-pliku]`. Możemy to jednak zautomatyzować zmieniając zawartość pliku konfiguracyjnego `/etc/fstab`. W pliku tym zawarte są informacje na temat punktów montowania partycji.
 
-```config
+```fstab
 # /etc/fstab: static file system information.
 #
 # Use 'blkid' to print the universally unique identifier for a
