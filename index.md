@@ -1,4 +1,4 @@
-## Ostatnie artykuły
+## Ostatnie artykuły [![RSS feed](images/rss-icon.svg)](feed.xml)
 
 ### [Konfiguracja pamięci wymiany (swap)](konfiguracja-pamięci-wymiany-swap.md)
 

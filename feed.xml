@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+	<channel>
+		<title>Anedroid GNU/Linux blog</title>
+		<link>https://anedroid.github.io</link>
+		<description>Mój blog poświęcony tematyce GNU/Linuxa</description>
+		<language>pl</language>
+		<docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+		<item>
+			<title>Konfiguracja pamięci wymiany (swap)</title>
+			<link>https://anedroid.github.io/konfiguracja-pami%C4%99ci-wymiany-swap.html</link>
+			<guid>konfiguracja-pamięci-wymiany-swap</guid>
+			<pubDate>Wed, 24 Mar 2021</pubDate>
+			<description>Pamięć wymiany, to rozszerzenie pamięci RAM o część fizycznej pamięci na dysku twardym. Obie pamięci są ze sobą połączone. Dzięki temu na komputerze można uruchomić bardziej zasobożerne programy lub sprawić, że stary komputer będzie działał lepiej. W dzisiejszym artykule opowiem, w jaki sposób rozszerzyć pamięć w systemie Linux (funkcjonalność kernela).</description>
+		</item>
+		<item>
+			<title>System plików Linuxa</title>
+			<link>https://anedroid.github.io/system-plik%C3%B3w-linuxa.html</link>
+			<guid>system-plików-linuxa</guid>
+			<pubDate>Wed, 17 Mar 2021</pubDate>
+			<description>System plików Linuxa to jedno z najważniejszych zagadnień niezbędnych do opanowania aby sprawnie poruszać się po systemie. I jest trochę bardziej złożone zagadnienie niż mogłoby się wydawać, dlatego postaram się je w miarę jasno wytłumaczyć.</description>
+		</item>
+		<item>
+			<title>Wprowadzenie - instalacja GNU/Linux</title>
+			<link>https://anedroid.github.io/wprowadzenie-instalacja-gnu-linux.html</link>
+			<guid>wprowadzenie-instalacja-gnu-linux</guid>
+			<pubDate>Tue, 16 Mar 2021</pubDate>
+			<description>Witajcie na moim blogu poświęconym tematyce GNU/Linuxa i programowania, a to jest pierwszy artykuł w którym opowiem o tym, czym jest GNU/Linux, dlaczego warto się nim zainteresować, oraz jak go zainstalować na swoim komputerze.</description>
+		</item>
+	</channel>
+</rss>
