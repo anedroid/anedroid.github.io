@@ -1,4 +1,4 @@
-**Utworzony* 24.03.2021*
+*Utworzony 24.03.2021*
 
 # Konfiguracja pamięci wymiany (swap)
 
@@ -84,7 +84,7 @@ Najwygodniej będzie dodać partycję wymiany na samym końcu dysku, ponieważ n
 
 Jeżeli instalowaliście GNU/Linuxa obok Windowsa, powinniście widzieć w podglądzie 3 partycje z lewej strony dla Windowsa, oraz jedną partycję z prawej strony dla GNU/Linuxa. Jeżeli zainstalowaliście GNU/Linuxa jako jedyny system na dysku, powinniście widzieć jedną partycję na cały dysk. Linux nie pozwoli na modyfikację własnej partycji, bo wymaga to odmontowania głównego węzła systemu plików przed modyfikacją, a po odmontowaniu wszystko przestałoby działać.
 
-Aby zmniejszyć partycję rootfs, konieczne jest najpierw uruchomienie Linuxa z innej partycji. Jeżeli wasza dystrybucja posiada tryb Live CD (testowanie systemu bez instalacji), uruchomcie ją z pendriva którego użyliście do instalacji. Opisałem to [tutaj](wprowadzenie-instalacja-gnu-linux.md#nagrywanie-obrazu-dysku). Polecam zachować obraz iso po instalacji, bo może się jeszcze przydać. Jeżeli wasza dystrybucja nie posiada trybu Live CD, możecie pobrać obraz specjalnej dystrybucji GNU/Linuxa, przeznaczonej do tego typu zadań, na przykład *All in One System Rescue Toolkit*. Plik waży nieco ponad 600 MiB.
+Aby zmniejszyć partycję rootfs, konieczne jest najpierw uruchomienie Linuxa z innej partycji. Jeżeli wasza dystrybucja posiada tryb Live CD (testowanie systemu bez instalacji), uruchomcie ją z pendriva którego użyliście do instalacji. Opisałem to [tutaj](wprowadzenie-instalacja-gnu-linux.md#instalacja-gnulinuxa). Polecam zachować obraz iso po instalacji, bo może się jeszcze przydać. Jeżeli wasza dystrybucja nie posiada trybu Live CD, możecie pobrać obraz specjalnej dystrybucji GNU/Linuxa, przeznaczonej do tego typu zadań, na przykład *All in One System Rescue Toolkit*. Plik waży nieco ponad 600 MiB.
 
 Następnie uruchomcie program do zarządzania partycjami lub jeżeli takiego nie ma, zainstalujcie Gparted. Teraz możecie zmniejszyć partycję Linuxa na dysku, dodać nową na końcu i sformatować na *linux-swap*.
 
