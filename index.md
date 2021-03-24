@@ -1,5 +1,12 @@
 ## Ostatnie artykuły
 
+### [Konfiguracja pamięci wymiany (swap)](konfiguracja-pamięci-wymiany-swap.md)
+
+*24.03.2021*
+
+> Pamięć wymiany, to rozszerzenie pamięci RAM o część fizycznej pamięci na dysku twardym. Obie pamięci są ze sobą połączone. Dzięki temu na komputerze można uruchomić bardziej zasobożerne programy lub sprawić, że stary komputer będzie działał lepiej. W dzisiejszym artykule opowiem, w jaki sposób rozszerzyć pamięć w systemie Linux (funkcjonalność kernela).
+>
+
 ### [System plików Linuxa](system-plików-linuxa.md)
 
 *17.03.2021*
