@@ -1,6 +1,12 @@
 ## Ostatnie artykuły
 <a href="feed.xml" download>![icon](images/rss-icon.svg)</a><a href="feed.xml" download>RSS</a>
 
+### [Serwer www w systemie GNU/Linux](serwer-www-w-systemie-gnu-linux.md)
+
+*25.03.2021*
+
+> O ile postawienie prostej strony www na XAMPP-ie w Windowsie jest dosyć proste, to konfiguracja serwerów sieciowych w GNU/Linuxie może na początku sprawiać pewne problemy, między innymi dlatego, że zarządza się nimi wyłącznie z poziomu terminala. W dzisiejszym artykule znowu poznacie kilka komend. Opiszę jak krok-po-kroku zainstalować i skonfigurować serwery apache2 i mySQL oraz hosty wirtualne.
+
 ### [Konfiguracja pamięci wymiany (swap)](konfiguracja-pamięci-wymiany-swap.md)
 
 *24.03.2021*
