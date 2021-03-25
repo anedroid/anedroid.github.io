@@ -1,5 +1,5 @@
 ## Ostatnie artykuły
-<a href="feed.xml" download>![icon](images/rss-icon.svg)</a><a href="feed.xml" download>RSS</a>
+<a href="feed.xml" download>![icon](images/rss-icon.svg)</a> <a href="feed.xml" download>RSS</a>
 
 ### [Serwer www w systemie GNU/Linux](serwer-www-w-systemie-gnu-linux.md)
 
