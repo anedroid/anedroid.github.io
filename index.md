@@ -3,7 +3,7 @@
 
 ### [Serwer www w systemie GNU/Linux](serwer-www-w-systemie-gnu-linux.md)
 
-*26.03.2021*
+*29.03.2021* (jeszcze nieukończony)
 
 > O ile postawienie prostej strony www na XAMPP-ie w Windowsie jest dosyć proste, to konfiguracja serwerów sieciowych w GNU/Linuxie może na początku sprawiać pewne problemy, między innymi dlatego, że zarządza się nimi wyłącznie z poziomu terminala. W dzisiejszym artykule znowu poznacie kilka komend. Opiszę dokładnie jak zainstalować i skonfigurować serwery apache2 i mySQL oraz hosty wirtualne.
 

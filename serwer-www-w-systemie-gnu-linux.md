@@ -1,4 +1,4 @@
-*Utworzony 26.03.2021*
+*Utworzony 29.03.2021*
 
 # Serwer www w systemie GNU/Linux
 
@@ -428,4 +428,216 @@ drop database phpmyadmin;
 drop user phpmyadmin@localhost;
 ```
 
-**To nie koniec artykułu. Resztę napiszę później**
+Jeżeli phpmyadmin działa, powinno dać się do niego zalogować za pomocą konta phpmyadmin, wyświetlać wszystkie bazy danych, w tym systemowe `mysql`, `phpmyadmin`, `sys`, `information_schema` i `performance_schema`, oraz wyświetlać opcję zarządzania użytkownikami. Nie muszę chyba tłumaczyć, jak zarządzać bazami poprzez phpmyadmin.
+
+## Hosty wirtualne
+
+Na tym nie kończy się konfiguracja serwera. Pozostała jeszcze kwestia hostów wirtualnych. Ogólnie chodzi o to, że do strony odwołujemy się nie poprzez adres IP, a domenę - którą samą możecie sobie wymyślić. Localhost jest jedną z takich domen. Zaletą hostów wirtualnych jest nie tylko wygoda, ale przede wszystkim możliwość postawienia więcej niż jednej strony na serwerze. Gdybyśmy nie korzystali z domen, moglibyśmy je rozdzielić pomiędzy oddzielne katalogi w `/var/www/html`, ale w rzeczywistości nadal należałyby do tego samego hosta. Natomiast wadą hostów wirtualnych jest ograniczenie dostępu. Domyślnie do domeny będziemy mieli dostęp tylko z serwera na którym się znajduje, a otwarcie strony na innym urządzeniu będzie wymagać ustawienia na nim adresu IP naszego serwera jako serwer DNS, albo skonfigurowania routera do pracy z lokalnymi domenami, jeżeli router to obsługuje.
+
+Przydzielaniem domen do adresów IP - w naszym przypadku wszystkich do lokalnego serwera - zajmuje się serwer nazw: DNS (*Domain name system*). Otwarcie domeny na serwerze nie będzie wymagać instalacji żadnego dodatkowego oprogramowania, ale my chcemy rozszerzyć jego dostęp na inne urządzenia w sieci, dlatego zainstalujemy program *dnsmasq*.
+
+Zanim to zrobimy, zmieńmy zawartość pliku `/etc/hosts`.
+
+```
+127.0.0.1	localhost
+127.0.0.1	[computer-hostname]
+
+# The following lines are desirable for IPv6 capable hosts
+::1			ip6-localhost ip6-loopback
+fe00::0		ip6-localnet
+ff00::0		ip6-mcastprefix
+ff02::1		ip6-allnodes
+ff02::2		ip6-allrouters
+```
+
+Jak widzicie, początkowo plik ten zawiera już 2 domeny: localhost i nazwa waszego komputera. Otwarcie każdej z nich w przeglądarce skutkować będzie odpaleniem strony z `/var/www/html`. Nie polecam usuwać żadnej z nich, a zwłaszcza nazwy komputera przy pomocy której GNU/Linux rozpoznaje samego siebie. Jeżeli chcemy zmienić nazwę komputera bez ryzyka błędu, najpierw dodamy tutaj domenę z nową nazwą, a dopiero potem zmienimy nazwę której szuka tutaj system.
+
+Istnieje specjalna grupa domen `.local` przeznaczona do sieci lokalnych. Ponieważ nie są, a przynajmniej nie powinny być stosowane w internetowym systemie DNS, możemy wybrać sobie dowolną nazwę kończącą się na .local bez ryzyka kolizji. Jeżeli jednak chcecie utworzyć lokalną domenę .com, .pl, .org, .net lub inną, warto ją najpierw zpingować aby sprawdzić czy nie jest zajęta.
+
+```bash
+ping example.com
+```
+
+Dodajcie nową domenę w pliku `/etc/hosts` pod adresem IP `127.0.0.1`, czyli tzw. *pętlą zwrotną* - adres który zawsze będzie wskazywał na samego siebie. Ja dla przykładu utworzę domenę libremail.local.
+
+```
+127.0.0.1	localhost
+127.0.0.1	[computer-hostname]
+127.0.0.1	libremail.local
+
+# The following lines are desirable for IPv6 capable hosts
+::1			ip6-localhost ip6-loopback
+fe00::0		ip6-localnet
+ff00::0		ip6-mcastprefix
+ff02::1		ip6-allnodes
+ff02::2		ip6-allrouters
+```
+
+Po zapisaniu pliku można już pingować domeną libremail.local, ale otwarcie jej w przeglądarce będzie skutkowało wyświetleniem domyślnej strony apache2. Teraz skonfigurujemy apache2 tak, aby otrzymując żądanie na domenę libremail.local wyświetlił stronę z `/var/www/libremail`.
+
+Przejdźmy teraz do katalogu `/etc/apache2/sites-available`. Tworzymy tutaj plik libremail.conf. Dla ułatwienia możemy skopiować konfigurację domyślnej strony i edytować ją.
+
+```
+$ cd /etc/apache2/sites-available
+/etc/apache2/sites-available$ ls
+000-default.conf  default-ssl.conf
+/etc/apache2/sites-available$ sudo cp 000-default.conf libremail.conf
+[sudo] hasło użytkownika user:
+/etc/apache2/sites-available$ sudo nano libremail.conf
+```
+
+```
+<VirtualHost *:80>
+        # The ServerName directive sets the request scheme, hostname and port that
+        # the server uses to identify itself. This is used when creating
+        # redirection URLs. In the context of virtual hosts, the ServerName
+        # specifies what hostname must appear in the request's Host: header to
+        # match this virtual host. For the default virtual host (this file) this
+        # value is not decisive as it is used as a last resort host regardless.
+        # However, you must set it for any further virtual host explicitly.
+        #ServerName www.example.com
+
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/html
+
+        # Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
+        # error, crit, alert, emerg.
+        # It is also possible to configure the loglevel for particular
+        # modules, e.g.
+        #LogLevel info ssl:warn
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        # For most configuration files from conf-available/, which are
+        # enabled or disabled at a global level, it is possible to
+        # include a line for only one particular virtual host. For example the
+        # following line enables the CGI configuration for this host only
+        # after it has been globally disabled with "a2disconf".
+        #Include conf-available/serve-cgi-bin.conf
+</VirtualHost>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
+```
+
+```
+<VirtualHost *:80>
+	ServerName libremail.local
+	DocumentRoot /var/www/libremail/public
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+
+Teraz trzeba dodać stronę komendą `a2ensite` i przeładować apache2.
+
+```
+/etc/apache2/sites-available$ sudo a2ensite libremail.conf
+Enabling site libremail.
+To activate the new configuration, you need to run:
+  systemctl reload apache2
+/etc/apache2/sites-available$ sudo systemctl reload apache2
+```
+
+Otwieramy [libremail.local](http://libremail.local) w przeglądarce i voila! Dostajemy błąd 404 co świadczy, że strona próbuje się uruchomić z innej lokalizacji którą podaliśmy w konfiguracji.
+
+![Błąd 404](images/serwer-www-w-systemie-gnu-linux_4.png)
+
+Teraz oczywiście utworzymy odpowiednie katalogi i pliki tak, aby w przeglądarce wyświetlała się odpowiednia strona.
+
+### dnsmasq
+
+dnsmasq to lekki program DNS, który pozwoli nam uzyskać dostęp do domeny z innych urządzeń w sieci - komputerów, telefonów, etc.
+
+```bash
+sudo apt install dnsmasq
+```
+
+I teraz **uwaga**: niezbyt dobrze jeszcze opanowałem obsługę DNS, dlatego to co teraz napiszę jest, wydaje mi się, rozwiązaniem prowizorycznym: działa, ale raczej nie jest to zrobione prawidłowo.
+
+Zaczniemy od konfiguracji dnsmasq. Cała jego konfiguracja obejmuje jeden plik: `/etc/dnsmasq.conf`. Pomijając liczne komentarze, wygląda ona u mnie tak.
+
+```ini
+port=53
+domain-needed
+bogus-priv
+listen-address=127.0.0.1,192.168.8.2
+expand-hosts
+cache-size=0
+```
+
+Wystarczy ją wkleić na końcu pliku. Można też, rzecz jasna znaleźć odpowiednie linijki, odkomentować i zastąpić tymi wartościami. Oczywiście po zmianie konfiguracji ustawienia należy przeładować za pomocą  `systemctl reload dnsmasq`. Do prawidłowego działania serwera DNS wymagany jest stały adres IP. Jeżeli nie ustawiałeś nigdy ręcznie adresu IP w swoim komputerze, prawie na pewno został on przydzielony automatycznie przez DHCP routera. Najprościej jest ustawić stały adres przez graficzny interfejs systemu.
+
+Kolejny krok to plik `/etc/resolv.conf`. Jest generowany automatycznie przez NetworkManager, o czym świadczy komentarz. Przechowuje adresy serwerów DNS z którymi łączy się komputer aby zdobyć adres IP hosta. Nie ma potrzeby wpisywać w nim adresu localhosta, ponieważ z poziomu serwera domeny z `/etc/hosts` są zawsze dostępne.
+
+```
+nameserver 1.1.1.1
+nameserver 1.0.0.1
+```
+
+Niestety plik resolv.conf automatycznie wraca do poprzedniego stanu gdy tylko komputer ponownie połączy się z siecią. Pisząc ten artykuł znalazłem jednak sposób na obejście tego.
+
+```bash
+cd /etc
+# Tymczasowo włączamy sobie uprawnienia do zapisu w /etc
+sudo chmod o+w ./
+# Zmieniamy użytkownika pliku na siebie
+sudo chown user: resolv.conf
+# Zmieniamy nazwę
+mv resolv.conf resolv-custom.conf
+# Tworzymy dowiązanie symboliczne pod oryginalną nazwą
+ln -s resolv-custom.conf resolv.conf
+sudo chmod o-w ./
+# Plik powinien należeć teraz do "user" i jego grupy, oraz mieć uprawnienia rw-r--r-- (644)
+```
+
+Nie wiem jak jest w innych dystrybucjach GNU/Linux, ale w Kubuntu NetworkManager będzie próbował ponownie ustawić właściciela na root i zmienić zawartość pliku, ale nie można nadawać uprawnień do dowiązań symbolicznych. Mimo że komenda `ls -l resolv.conf` pokazuje uprawnienia lrwxrwxrwx, w rzeczywistości ma takie uprawnienia jak oryginalny plik. Musiałby zmienić właściciela pliku resolv-custom.conf, ale nie będzie próbował tego robić.
+
+Zanim przejdziemy do uruchomienia usługi, przygotujmy inne urządzenie do testowania DNS. Może to być drugi komputer na którym ustawimy ręcznie adres IP, a jako DNS adres IP pierwszego komputera, albo telefon. Powinien zapewniać opcję ustawienia DNS-a w ustawieniach Wi-Fi, ale jeżeli jej nie ma, konieczne będzie zainstalowanie oddzielnej aplikacji. Polecam zmodyfikowaną przeze mnie wersję [Adguard](download/AdGuard.ver.3.6.1.build.10000471.apk) (com.adguard.android), ale jeżeli w repozytorium [F-Droid](https://f-droid.org) znajduje się firewall zapewniający podobną funkcjonalność, rekomenduję jego instalację zamiast Adguard, ponieważ to aplikacja komercyjna.
+
+Aby w Adguard ustawić DNS, przejdźcie do *Settings/DNS Filtering/Select DNS server*. Kliknijcie "Add custom DNS server" i wpiszcie adres IP waszego komputera.
+
+Teraz uruchomimy dnsmasq. DNS działa na porcie 53, podobnie jak systemowa usługa systemd-resolved. Porty będą ze sobą kolidować i dnsmasq nie uruchomi się. Aby to zrobić, należy przed włączeniem dnsmasq na chwilę wyłączyć systemd-resolved.
+
+```
+$ systemctl status dnsmasq
+● dnsmasq.service - dnsmasq - A lightweight DHCP and caching DNS server
+     Loaded: loaded (/lib/systemd/system/dnsmasq.service; enabled; vendor preset: enabled)
+     Active: failed (Result: exit-code) since Mon 2021-03-29 17:17:35 CEST; 6s ago
+    Process: 4447 ExecStartPre=/usr/sbin/dnsmasq --test (code=exited, status=0/SUCCESS)
+    Process: 4459 ExecStart=/etc/init.d/dnsmasq systemd-exec (code=exited, status=2)
+$ sudo systemctl stop systemd-resolved
+[sudo] hasło użytkownika user:
+$ sudo systemctl start dnsmasq
+$ sudo systemctl start systemd-resolved
+$ systemctl status dnsmasq systemd-resolved
+● dnsmasq.service - dnsmasq - A lightweight DHCP and caching DNS server
+     Loaded: loaded (/lib/systemd/system/dnsmasq.service; enabled; vendor preset: enabled)
+     Active: active (running) since Mon 2021-03-29 17:18:04 CEST; 12s ago
+    Process: 4541 ExecStartPre=/usr/sbin/dnsmasq --test (code=exited, status=0/SUCCESS)
+    Process: 4552 ExecStart=/etc/init.d/dnsmasq systemd-exec (code=exited, status=0/SUCCESS)
+    Process: 4561 ExecStartPost=/etc/init.d/dnsmasq systemd-start-resolvconf (code=exited, status=0/SUCCESS)
+   Main PID: 4560 (dnsmasq)
+      Tasks: 1 (limit: 3324)
+     Memory: 2.8M
+     CGroup: /system.slice/dnsmasq.service
+             └─4560 /usr/sbin/dnsmasq -x /run/dnsmasq/dnsmasq.pid -u dnsmasq -7 /etc/dnsmasq.d,.dpkg-dist,.dpkg-old,.dpkg-new --local-service --trust-anchor=.,20326,8,2,e06d44b80b8f1d39a95c0b0d7c65d08458e880409bbc683457104237c7f8ec8d
+
+● systemd-resolved.service - Network Name Resolution
+     Loaded: loaded (/lib/systemd/system/systemd-resolved.service; enabled; vendor preset: enabled)
+     Active: active (running) since Mon 2021-03-29 17:18:11 CEST; 5s ago
+       Docs: man:systemd-resolved.service(8)
+             https://www.freedesktop.org/wiki/Software/systemd/resolved
+             https://www.freedesktop.org/wiki/Software/systemd/writing-network-configuration-managers
+             https://www.freedesktop.org/wiki/Software/systemd/writing-resolver-clients
+   Main PID: 4581 (systemd-resolve)
+     Status: "Processing requests..."
+      Tasks: 1 (limit: 3324)
+     Memory: 4.3M
+     CGroup: /system.slice/systemd-resolved.service
+             └─4581 /lib/systemd/systemd-resolved
+```
+
+W tym czasie może przestać działać internet, co można sprawdzić pingując dowolną publiczną domenę (nie adres IP). Po ponownym starcie systemu niestety systemd-resolved uruchomi się przed dnsmasq. Możecie spróbować wyłączyć systemd-resolved, a następnie zablokować jego autorozruch komendą `sudo systemctl disable systemd-resolved`. Internet nadal działa? Gratulacje! Serwer DNS został poprawnie skonfigurowany. Dla pewności warto jeszcze uruchomić ponownie komputer i zobaczyć czy wszystko nadal działa jak należy.
+
+**To nie koniec artykułu. Mam zamiar jeszcze napisać o certyfikatach SSL.**
