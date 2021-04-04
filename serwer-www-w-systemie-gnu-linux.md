@@ -1,8 +1,8 @@
-*Utworzony 29.03.2021*
+*Utworzony 4.04.2021*
 
 # Serwer www w systemie GNU/Linux
 
-O ile postawienie prostej strony www na XAMPP-ie w Windowsie jest dosyć proste, to konfiguracja serwerów sieciowych w GNU/Linuxie może na początku sprawiać pewne problemy, między innymi dlatego, że zarządza się nimi wyłącznie z poziomu terminala. W dzisiejszym artykule znowu poznacie kilka komend. Opiszę dokładnie jak zainstalować i skonfigurować serwery apache2 i mySQL oraz hosty wirtualne.
+O ile postawienie prostej strony www na XAMPP-ie w Windowsie jest dosyć proste, to konfiguracja serwerów sieciowych w GNU/Linuxie może na początku sprawiać pewne problemy, między innymi dlatego, że zarządza się nimi wyłącznie z poziomu terminala. W dzisiejszym artykule znowu poznacie kilka komend. Opiszę dokładnie jak zainstalować i skonfigurować serwery apache2, mySQL, DNS, oraz SSL.
 
 ![Screenshot XAMPP-a](images/serwer-www-w-systemie-gnu-linux_1.png)
 
@@ -553,91 +553,173 @@ dnsmasq to lekki program DNS, który pozwoli nam uzyskać dostęp do domeny z in
 sudo apt install dnsmasq
 ```
 
-I teraz **uwaga**: niezbyt dobrze jeszcze opanowałem obsługę DNS, dlatego to co teraz napiszę jest, wydaje mi się, rozwiązaniem prowizorycznym: działa, ale raczej nie jest to zrobione prawidłowo.
+Do prawidłowego działania serwera DNS wymagany jest stały adres IP. Jeżeli nie ustawiałeś nigdy ręcznie adresu IP w swoim komputerze, prawie na pewno został on przydzielony automatycznie przez DHCP routera. Najprościej jest ustawić stały adres przez graficzny interfejs systemu. Tak więc zanim przejdziecie do konfiguracji serwera DNS, ustawcie sobie stały adres IP, np. 192.168.0.2.
 
-Zaczniemy od konfiguracji dnsmasq. Cała jego konfiguracja obejmuje jeden plik: `/etc/dnsmasq.conf`. Pomijając liczne komentarze, wygląda ona u mnie tak.
+Systemowa usługa systemd-resolved będzie kolidować z dnsmasq. Jej zadaniem jest odpytywanie zewnętrznych serwerów DNS o adresy IP domen. Obie te usługi działają na porcie 53. Program dnsmasq może całkowicie zastąpić rolę systemd-resolved, dlatego systemową usługę wyłączymy i zablokujemy jej autorozruch. Podczas wykonywania poniższych czynności możecie chwilowo utracić dostęp do internetu, dlatego jeżeli coś pójdzie nie tak, skorzystajcie z poniższych komend aby samodzielnie przywrócić system do poprzedniego stanu:
 
-```ini
-port=53
-domain-needed
-bogus-priv
-listen-address=127.0.0.1,192.168.8.2
-expand-hosts
-cache-size=0
+```bash
+# Odblokuj autorozruch systemd-resolved
+sudo systemctl enable systemd-resolved
+# Włącz usługę systemd-resolved
+sudo systemctl start systemd-resolved
+# Zablokuj autorozruch dnsmasq
+sudo systemctl disable dnsmasq
+# Wyłącz usługę dnsmasq
+sudo systemctl stop dnsmasq
+# Całkowicie odinstaluj dnsmasq (włączając pliki konfiguracyjne)
+sudo apt autoremove --purge dnsmasq
 ```
 
-Wystarczy ją wkleić na końcu pliku. Można też, rzecz jasna znaleźć odpowiednie linijki, odkomentować i zastąpić tymi wartościami. Oczywiście po zmianie konfiguracji ustawienia należy przeładować za pomocą  `systemctl reload dnsmasq`. Do prawidłowego działania serwera DNS wymagany jest stały adres IP. Jeżeli nie ustawiałeś nigdy ręcznie adresu IP w swoim komputerze, prawie na pewno został on przydzielony automatycznie przez DHCP routera. Najprościej jest ustawić stały adres przez graficzny interfejs systemu.
-
-Kolejny krok to plik `/etc/resolv.conf`. Jest generowany automatycznie przez NetworkManager, o czym świadczy komentarz. Przechowuje adresy serwerów DNS z którymi łączy się komputer aby zdobyć adres IP hosta. Nie ma potrzeby wpisywać w nim adresu localhosta, ponieważ z poziomu serwera domeny z `/etc/hosts` są zawsze dostępne.
+Ustawcie zewnętrzne serwery DNS w pliku `/etc/resolv.conf`, jak poniżej:
 
 ```
 nameserver 1.1.1.1
 nameserver 1.0.0.1
 ```
 
-Niestety plik resolv.conf automatycznie wraca do poprzedniego stanu gdy tylko komputer ponownie połączy się z siecią. Pisząc ten artykuł znalazłem jednak sposób na obejście tego.
+Nie ma potrzeby ustawiać tu adresu localhosta, ponieważ domeny z `/etc/hosts` są zawsze dostępne z poziomu serwera.
 
-```bash
-cd /etc
-# Tymczasowo włączamy sobie uprawnienia do zapisu w /etc
-sudo chmod o+w ./
-# Zmieniamy użytkownika pliku na siebie
-sudo chown user: resolv.conf
-# Zmieniamy nazwę
-mv resolv.conf resolv-custom.conf
-# Tworzymy dowiązanie symboliczne pod oryginalną nazwą
-ln -s resolv-custom.conf resolv.conf
-sudo chmod o-w ./
-# Plik powinien należeć teraz do "user" i jego grupy, oraz mieć uprawnienia rw-r--r-- (644)
+Niestety plik resolv.conf automatycznie wraca do poprzedniego stanu gdy tylko komputer ponownie połączy się z siecią za sprawą NetworkManagera, powodując że internet przestaje działać. Raczej trudno jest to obejść (uwierzcie mi, próbowałem!), chyba że można zmienić to zachowanie gdzieś w konfiguracji NetworkManager. Ale jest też prostszy sposób: zapiszcie plik resolv.conf pod inną nazwą, np. resolv.custom.conf, a następnie ustawcie dnsmasq tak, aby czytał ten plik zamiast resolv.conf.
+
+Cała konfiguracja dnsmasq obejmuje jeden plik: `/etc/dnsmasq.conf`. Znajdźcie tam wartość `resolv-file` i zmieńcie jego wartość:
+
+```ini
+# Change this line if you want dns to get its upstream servers from
+# somewhere other that /etc/resolv.conf
+resolv-file=/etc/resolv.custom.conf
 ```
 
-Nie wiem jak jest w innych dystrybucjach GNU/Linux, ale w Kubuntu NetworkManager będzie próbował ponownie ustawić właściciela na root i zmienić zawartość pliku, ale nie można nadawać uprawnień do dowiązań symbolicznych. Mimo że komenda `ls -l resolv.conf` pokazuje uprawnienia lrwxrwxrwx, w rzeczywistości ma takie uprawnienia jak oryginalny plik. Musiałby zmienić właściciela pliku resolv-custom.conf, ale nie będzie próbował tego robić.
+Przeładujcie ustawienia komendą:
 
-Zanim przejdziemy do uruchomienia usługi, przygotujmy inne urządzenie do testowania DNS. Może to być drugi komputer na którym ustawimy ręcznie adres IP, a jako DNS adres IP pierwszego komputera, albo telefon. Powinien zapewniać opcję ustawienia DNS-a w ustawieniach Wi-Fi, ale jeżeli jej nie ma, konieczne będzie zainstalowanie oddzielnej aplikacji. Polecam zmodyfikowaną przeze mnie wersję [Adguard](https://github.com/anedroid/adguard-mod) (com.adguard.android), ale jeżeli w repozytorium [F-Droid](https://f-droid.org) znajduje się firewall zapewniający podobną funkcjonalność, rekomenduję jego instalację zamiast Adguard, ponieważ to aplikacja komercyjna.
+```bash
+sudo systemctl restart dnsmasq
+```
+
+Zanim przejdziemy do uruchomienia usługi, przygotujmy inne urządzenie do testowania DNS. Może to być drugi komputer na którym ustawimy ręcznie jako DNS adres IP pierwszego komputera, albo telefon. Powinien zapewniać opcję ustawienia DNS-a w ustawieniach Wi-Fi, ale jeżeli jej nie ma, konieczne będzie zainstalowanie oddzielnej aplikacji. Polecam zmodyfikowaną przeze mnie wersję [Adguard](https://github.com/anedroid/adguard-mod) (com.adguard.android), ale jeżeli w repozytorium [F-Droid](https://f-droid.org) znajduje się firewall zapewniający podobną funkcjonalność, rekomenduję jego instalację zamiast Adguard, ponieważ to aplikacja komercyjna.
 
 Aby w Adguard ustawić DNS, przejdźcie do *Settings/DNS Filtering/Select DNS server*. Kliknijcie "Add custom DNS server" i wpiszcie adres IP waszego komputera.
 
-Teraz uruchomimy dnsmasq. DNS działa na porcie 53, podobnie jak systemowa usługa systemd-resolved. Porty będą ze sobą kolidować i dnsmasq nie uruchomi się. Aby to zrobić, należy przed włączeniem dnsmasq na chwilę wyłączyć systemd-resolved.
+Wpiszcie poniższe komendy aby zamienić systemd-resolved z dnsmasq.
+
+```bash
+sudo systemctl stop systemd-resolved
+sudo systemctl start dnsmasq
+sudo systemctl disable systemd-resolved
+```
+
+`systemctl status systemd-resolved dnsmasq` powinien teraz zwrócić coś takiego:
 
 ```
-$ systemctl status dnsmasq
-● dnsmasq.service - dnsmasq - A lightweight DHCP and caching DNS server
-     Loaded: loaded (/lib/systemd/system/dnsmasq.service; enabled; vendor preset: enabled)
-     Active: failed (Result: exit-code) since Mon 2021-03-29 17:17:35 CEST; 6s ago
-    Process: 4447 ExecStartPre=/usr/sbin/dnsmasq --test (code=exited, status=0/SUCCESS)
-    Process: 4459 ExecStart=/etc/init.d/dnsmasq systemd-exec (code=exited, status=2)
-$ sudo systemctl stop systemd-resolved
-[sudo] hasło użytkownika user:
-$ sudo systemctl start dnsmasq
-$ sudo systemctl start systemd-resolved
-$ systemctl status dnsmasq systemd-resolved
-● dnsmasq.service - dnsmasq - A lightweight DHCP and caching DNS server
-     Loaded: loaded (/lib/systemd/system/dnsmasq.service; enabled; vendor preset: enabled)
-     Active: active (running) since Mon 2021-03-29 17:18:04 CEST; 12s ago
-    Process: 4541 ExecStartPre=/usr/sbin/dnsmasq --test (code=exited, status=0/SUCCESS)
-    Process: 4552 ExecStart=/etc/init.d/dnsmasq systemd-exec (code=exited, status=0/SUCCESS)
-    Process: 4561 ExecStartPost=/etc/init.d/dnsmasq systemd-start-resolvconf (code=exited, status=0/SUCCESS)
-   Main PID: 4560 (dnsmasq)
-      Tasks: 1 (limit: 3324)
-     Memory: 2.8M
-     CGroup: /system.slice/dnsmasq.service
-             └─4560 /usr/sbin/dnsmasq -x /run/dnsmasq/dnsmasq.pid -u dnsmasq -7 /etc/dnsmasq.d,.dpkg-dist,.dpkg-old,.dpkg-new --local-service --trust-anchor=.,20326,8,2,e06d44b80b8f1d39a95c0b0d7c65d08458e880409bbc683457104237c7f8ec8d
-
+$ systemctl status systemd-resolved dnsmasq
 ● systemd-resolved.service - Network Name Resolution
-     Loaded: loaded (/lib/systemd/system/systemd-resolved.service; enabled; vendor preset: enabled)
-     Active: active (running) since Mon 2021-03-29 17:18:11 CEST; 5s ago
+     Loaded: loaded (/lib/systemd/system/systemd-resolved.service; disabled; vendor preset: enabled)
+     Active: inactive (dead)
        Docs: man:systemd-resolved.service(8)
              https://www.freedesktop.org/wiki/Software/systemd/resolved
              https://www.freedesktop.org/wiki/Software/systemd/writing-network-configuration-managers
              https://www.freedesktop.org/wiki/Software/systemd/writing-resolver-clients
-   Main PID: 4581 (systemd-resolve)
-     Status: "Processing requests..."
+
+● dnsmasq.service - dnsmasq - A lightweight DHCP and caching DNS server
+     Loaded: loaded (/lib/systemd/system/dnsmasq.service; enabled; vendor preset: enabled)
+     Active: active (running) since Sun 2021-04-04 13:09:54 CEST; 2h 10min ago
+    Process: 815 ExecStartPre=/usr/sbin/dnsmasq --test (code=exited, status=0/SUCCESS)
+    Process: 828 ExecStart=/etc/init.d/dnsmasq systemd-exec (code=exited, status=0/SUCCESS)
+    Process: 881 ExecStartPost=/etc/init.d/dnsmasq systemd-start-resolvconf (code=exited, status=0/SUCCESS)
+   Main PID: 874 (dnsmasq)
       Tasks: 1 (limit: 3324)
-     Memory: 4.3M
-     CGroup: /system.slice/systemd-resolved.service
-             └─4581 /lib/systemd/systemd-resolved
+     Memory: 2.2M
+     CGroup: /system.slice/dnsmasq.service
+             └─874 /usr/sbin/dnsmasq -x /run/dnsmasq/dnsmasq.pid -u dnsmasq -7 /etc/dnsmasq.d,.dpkg-dist,.dpkg-old,.dpkg-new --local-service --trust-anchor=.,20326,8,2,e06d44b80b8f1d39a95c0b>
+
+Warning: some journal files were not opened due to insufficient permissions.
 ```
 
-W tym czasie może przestać działać internet, co można sprawdzić pingując dowolną publiczną domenę (nie adres IP). Po ponownym starcie systemu niestety systemd-resolved uruchomi się przed dnsmasq. Możecie spróbować wyłączyć systemd-resolved, a następnie zablokować jego autorozruch komendą `sudo systemctl disable systemd-resolved`. Internet nadal działa? Gratulacje! Serwer DNS został poprawnie skonfigurowany. Dla pewności warto jeszcze uruchomić ponownie komputer i zobaczyć czy wszystko nadal działa jak należy.
+Zpingujcie dowolną domenę aby sprawdzić, czy internet jest dostępny. Sprawdźcie też, czy internet jest dostępny w drugim testowym urządzeniu, oraz czy da się otworzyć lokalne domeny (np. libremail.local).
 
-**To nie koniec artykułu. Mam zamiar jeszcze napisać o certyfikatach SSL.**
+```
+$ ping a.pl
+PING a.pl (94.23.196.139) 56(84) bytes of data.
+64 bytes from ns350225.ip-94-23-196.eu (94.23.196.139): icmp_seq=1 ttl=49 time=71.1 ms
+64 bytes from ns350225.ip-94-23-196.eu (94.23.196.139): icmp_seq=2 ttl=49 time=69.8 ms
+^C
+--- a.pl ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+rtt min/avg/max/mdev = 69.799/70.467/71.136/0.668 ms
+```
+
+## Certyfikat SSL
+
+Ostatni aspekt konfiguracji serwera www to certyfikat SSL dzięki któremu możemy wchodzić na strony internetowe przez https i szyfrować połączenie. W porównaniu do poprzednich zadań, ustawienie certyfikatu jest względnie proste, więc jeżeli poradziliście sobie z mySQL, phpmyadmin i dnsmasq, z tym również sobie poradzicie. Najpierw trochę teorii.
+
+Protokół http standardowo działa na porcie 80, a https na porcie 443. Szyfrowanie https opiera się o kryptografię asymetryczną, lub inaczej kryptografię klucza publicznego. W skrócie polega to na wygenerowaniu dwóch powiązanych ze sobą matematycznie kluczy. Dane zaszyfrowane za pomocą jednego z nich mogą zostać odszyfrowane tylko za pomocą drugiego. Nie można też łatwo wyciągnąć jednego klucza na podstawie drugiego. Jeden z tych kluczy, obojętnie który, zachowujemy jako prywatny, a drugi upubliczniamy.
+
+Parę kluczy generuje zarówno serwer, jak i klient. Gdy klient chce przesłać wiadomość do serwera, używa jego klucza publicznego do zaszyfrowania wiadomości, a serwer używa swojego klucza prywatnego do odszyfrowania, i odwrotnie. Dzięki takiemu modelowi komunikacji podsłuchiwanie sieci jest prawie niemożliwe. Jedyny sposób to atak typu man-in-the-middle, ale o nim i sposobie zabezpieczenia się napiszę w innym artykule.
+
+Klucz prywatny i zawierający klucz publiczny certyfikat SSL będziemy trzymać w katalogu `/etc/apache2/ssl`. Utwórzcie tam katalog i wygenerujcie parę kluczy. Zostaniecie zapytani o kilka rzeczy na które składać się będzie tożsamość klucza. Możecie je wypełnić według własnego uznania lub nawet zostawić puste, z wyjątkiem "Common Name", gdzie należy wpisać nazwę domeny.
+
+```
+$ sudo mkdir /etc/apache2/ssl
+[sudo] hasło użytkownika user:
+$ sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/apache2/ssl/libremail.key -out /etc/apache2/ssl/libremail.crt
+Generating a RSA private key
+.......................................+++++
+..........................................................................................................................................................+++++
+writing new private key to 'libremail.key'
+-----
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:PL
+State or Province Name (full name) [Some-State]:.
+Locality Name (eg, city) []:.
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:Libremail
+Organizational Unit Name (eg, section) []: 
+Common Name (e.g. server FQDN or YOUR name) []:libremail.local
+Email Address []:webmaster@libremail.local
+```
+
+Wyjaśnię teraz, co to oznacza:
+
+- openssl - program OpenSSL do tworzenia i zarządzania certyfikatami, kluczami, żądaniami podpisania, etc.
+- req - podkomenda openssl do zarządzania żądaniami podpisania certyfikatu X.509
+- -x509 - zamiast generować żądanie, utworzy samopodpisany certyfikat
+- -nodes - nie zabezpieczy pliku hasłem (zabezpieczenie hasłem przeszkodziłoby w automatycznym uruchomieniu apache2, ponieważ musielibyśmy każdorazowo wpisywać hasło)
+- -days 365 - certyfikat będzie ważny przez 1 rok
+- -newkey rsa:2048 - wygeneruje klucz 2048-bitowy klucz RSA
+- -keyout - ścieżka do tworzonego pliku klucza prywatnego
+- -out - ścieżka do tworzonego pliku certyfikatu
+
+Program openssl wygeneruje 2 pliki, z których jeden - klucz prywatny - będzie zabezpieczony przed odczytem. Teraz włączymy nowo utworzony certyfikat do serwera apache2. Otwórzcie plik konfiguracji wirtualnego hosta, np. `/etc/apache2/sites-available/libremail.conf`. Dodajcie na końcu drugi host.
+
+```
+<IfModule mod_ssl.c>
+	<VirtualHost *:443>
+		ServerName libremail.local
+		DocumentRoot /var/www/libremail/public
+		ErrorLog ${APACHE_LOG_DIR}/error.log
+		CustomLog ${APACHE_LOG_DIR}/access.log combined
+		SSLEngine on
+		SSLCertificateFile /etc/apache2/ssl/libremail.crt
+		SSLCertificateKeyFile /etc/apache2/ssl/libremail.key
+	</VirtualHost>
+</IfModule>
+```
+
+Jak widać, do działania SSL wymagany jest moduł `mod_ssl.c`. Włączymy go teraz.
+
+```bash
+sudo a2enmod ssl
+sudo systemctl reload apache2
+```
+
+Przetestujcie konfigurację odwiedzając swoją stronę z protokołem https. Przy pierwszym wejściu na stronę przeglądarka wyświetli ostrzeżenie, że certyfikat nie jest zaufany, ponieważ certyfikat nie został podpisany przez jeden z zaufanych urzędów certyfikacji. Za takie podpisanie certyfikatu najczęściej trzeba zapłacić, choć niektóre urzędy oferują darmowe certyfikaty, np. [Let's Encrypt](https://letsencrypt.org/). Nawet jeżeli tego nie zrobimy, ruch sieciowy pomiędzy hostem a klientem będzie od tej pory szyfrowany.
+
+![ostrzeżenie przeglądarki](images/serwer-www-w-systemie-gnu-linux_5.png)
+
+## Podsumowanie
+
+Opisałem w tym artykule wszystko co wiem na temat konfiguracji serwerów www w systemie GNU/Linux. Mam nadzieję, że pomogłem lepiej zrozumieć podstawy działania tych usług. W kolejnym (krótszym) artykule napiszę, jak zabezpieczyć połączenie ssh.
