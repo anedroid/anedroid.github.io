@@ -6,7 +6,7 @@ O ile postawienie prostej strony www na XAMPP-ie w Windowsie jest dosyć proste,
 
 ---
 
-[TOC]
+* TOC {:toc}
 
 ---
 
