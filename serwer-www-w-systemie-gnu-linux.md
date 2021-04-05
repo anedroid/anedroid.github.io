@@ -4,12 +4,6 @@
 
 O ile postawienie prostej strony www na XAMPP-ie w Windowsie jest dosyć proste, to konfiguracja serwerów sieciowych w GNU/Linuxie może na początku sprawiać pewne problemy, między innymi dlatego, że zarządza się nimi wyłącznie z poziomu terminala. W dzisiejszym artykule znowu poznacie kilka komend. Opiszę dokładnie jak zainstalować i skonfigurować serwery apache2, mySQL, DNS, oraz SSL.
 
----
-
-{:toc}
-
----
-
 
 
 ![Screenshot XAMPP-a](images/serwer-www-w-systemie-gnu-linux_1.png)
