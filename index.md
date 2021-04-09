@@ -1,6 +1,12 @@
 ## Ostatnie artykuły
 <a href="feed.xml" download>![icon](images/rss-icon.svg)</a> <a href="feed.xml" download>RSS</a>
 
+### [Integracja telefonu z komputerem](integracja-telefonu-z-komputerem.md)
+
+*9.04.2021*
+
+> Telefon z komputerem najczęściej łączymy aby: bezproblemowo przesyłać dane między tymi dwoma urządzeniami, sterować komputerem przy użyciu telefonu jak pilotem, albo wyświetlać powiadomienia na dużym ekranie bez odrywania się od pracy. Istnieje wiele różnych programów do realizacji tego celu, a w dzisiejszym artykule przedstawię dwa z nich: KDE Connect, oraz AirDroid. Każdy ma swoje zalety i wady, oraz różni się oferowanym zestawem funkcjonalności.
+
 ### [Jak zabezpieczyć połączenie SSH?](jak-zabezpieczyć-połączenie-ssh.md)
 
 *5.04.2021*
