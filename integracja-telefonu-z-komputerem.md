@@ -46,13 +46,13 @@ W ustawieniach KDE Connect na komputerze możemy dodać komendy które będzie m
 
 Od razu na starcie ostrzegam: **AirDroid jest aplikacją komercyjną, promuje niewolne usługi sieciowe, zawiera płatne funkcje, reklamy i trackery[^2] Google. Instalujecie na własną odpowiedzialność**. Aplikację *com.sand.android* możecie pobrać [stąd](https://play.google.com/store/apps/details?id=com.sand.airdroid). Przejdźmy do opisu aplikacji.
 
-![interfejs AirDroid - wygląda jak iOS](images/Screenshot_20210415_172401.png)
+![interfejs AirDroid - wygląda jak iOS](images/integracja-telefonu-z-komputerem_5.png)
 
 AirDroid jest przeznaczony do sterowania telefonem za pomocą komputera. Udostępnia nam ładny pulpit przypominający interfejs Apple (co potwierdzają screenshoty w Google Play), do którego to możemy uzyskać dostęp odwiedzając odpowiednią stronę w przeglądarce. AirDroid standardowo działa na porcie 8888, ponieważ system Android nie pozwala na otwarcie portu 80. Aby zobaczyć adres tej strony, należy wejść w *Urządzenia/AirDroid Web*.
 
 Podczas każdego logowania telefon wyświetli okno podobne do pytania czy udzielić uprawnienia aplikacji. Strona nie używa cookies, więc niestety będzie pytać każdorazowo. Pytania można to wyłączyć w ustawieniach (mało bezpieczne).
 
-![Screenshot_20210415-173606](images/Screenshot_20210415-173606-1618501511055.png)
+![Mogę się połączyć?](images/integracja-telefonu-z-komputerem_6.png)
 
 AirDroid udostępnia nam szereg funkcji do integracji telefonu i komputera na różnych płaszczyznach, które będę odtąd nazywać aplikacjami, ponieważ wyświetlają się w oknach jak aplikacje.
 
