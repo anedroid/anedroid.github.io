@@ -4,6 +4,20 @@
 
 O ile postawienie prostej strony www na XAMPP-ie w Windowsie jest dosyć proste, to konfiguracja serwerów sieciowych w GNU/Linuxie może na początku sprawiać pewne problemy, między innymi dlatego, że zarządza się nimi wyłącznie z poziomu terminala. W dzisiejszym artykule znowu poznacie kilka komend. Opiszę dokładnie jak zainstalować i skonfigurować serwery apache2, mySQL, DNS, oraz SSL.
 
+Ponieważ artykuł jest bardzo długi, macie tutaj spis treści aby łatwiej odnaleźć daną sekcję.
+
+- [apache2](#apache2)
+- [php](#php)
+- [mySQL](#mysql)
+  - [Tworzenie konta mySQL](#tworzenie-konta-mysql)
+  - [Zmiana polityki haseł](#zmiana-polityki-haseł)
+  - [Nadawanie uprawnień](#nadawanie-uprawnień)
+  - [Instalacja phpmyadmin](#instalacja-phpmyadmin)
+- [Hosty wirtualne](#hosty-wirtualne)
+  - [dnsmasq](#dnsmasq)
+- [Certyfikat SSL](#certyfikat-ssl)
+- [Podsumowanie](#podsumowanie)
+
 ![Screenshot XAMPP-a](images/serwer-www-w-systemie-gnu-linux_1.png)
 
 Przyjrzyjcie się powyższemu screenshotowi przedstawiającemu panel kontrolny XAMPP-a. Składa się on z kilku modułów-usług, które możemy włączać i wyłączać. Najważniejsze to:
@@ -337,6 +351,47 @@ mysql -u web -p
 Argument `-u` to oczywiście nazwa użytkownika, a `-p` informuje program, że mamy zamiar wpisać hasło. Pominięcie tego parametru będzie w tym przypadku skutkowało próbą zalogowania się na konto `web` bez hasła. Zostanie wyrzucony błąd o następującej treści:
 
 *ERROR 1045 (28000): Access denied for user 'web'@'localhost' (using password: NO)*
+
+### Zmiana polityki haseł
+
+*Aktualizacja z 27.04.2021*
+
+Zauważyłem, że często podczas tworzenia konta mySQL można napotkać na błąd:
+
+*ERROR 1819 (HY000): Your password does not satisfy the current policy requirements*
+
+Oznacza to, że wprowadzone hasło nie spełnia ustalonych wymogów, tzw. polityki haseł. Działa to identycznie jak serwis internetowy, który nie pozwala ustawić zbyt słabego hasła. MySQL po kolei sprawdza wymagania, i jeżeli któreś z nich nie jest spełnione, wyrzuca błąd. Aktualną konfigurację polityki haseł można sprawdzić zapytaniem:
+
+```mysql
+show variables like 'validate_password%';
+```
+
+Domyślna polityka wygląda następująco:
+
+| Variable_name                        | Value  |
+| ------------------------------------ | ------ |
+| validate_password.check_user_name    | ON     |
+| validate_password.dictionary_file    |        |
+| validate_password.length             | 8      |
+| validate_password.mixed_case_count   | 1      |
+| validate_password.number_count       | 1      |
+| validate_password.policy             | MEDIUM |
+| validate_password.special_char_count | 1      |
+
+Oznacza to, że minimalna długość hasła to 8 znaków, z czego przynajmniej jedna musi być literą, jedna cyfrą, a jedna innym znakiem. Hasło '12345' nie przejdzie, ale niezwykle popularne 'zaq1@WSX' już tak.
+
+Jeżeli mamy zamiar używać mySQL wyłącznie do nauki programowania, możemy obniżyć poziom bezpieczeństwa. Jeżeli użyjemy zapytania np. `set global validate_password.length=0`, polityka haseł faktycznie się zmieni, jednak przy kolejnym uruchomieniu mySQL wróci do swojego dawnego stanu. Jeżeli chcemy zmienić ją na stałe, należy edytować konfigurację mySQL. W pliku `/etc/mysql/my.cnf` dodajcie na końcu następujące linijki:
+
+```ini
+[mysqld]
+validate_password.policy=LOW
+validate_password.length=0
+validate_password.mixed_case_count=0
+validate_password.number_count=0
+validate_password.special_char_count=0
+```
+
+Spowoduje to całkowite wyłączenie polityki haseł. Serwer należy następnie przeładować `sudo systemctl restart mysql`.
 
 ### Nadawanie uprawnień
 
