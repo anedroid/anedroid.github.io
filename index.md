@@ -1,5 +1,12 @@
 ## Ostatnie artykuły
+
 <a href="feed.xml" download>![icon](images/rss-icon.svg)</a> <a href="feed.xml" download>RSS</a>
+
+### [Szyfrowanie emaili](szyfrowanie-emaili.md)
+
+*21.05.2021*
+
+> Dla większości z nas poczta email to taki krytyczny węzeł w tworzonej przez nas mikrosieci połączonych ze sobą kont internetowych, ponieważ za jego pomocą większość serwisów, sklepów i usług oferuje resetowanie hasła i potwierdzanie tożsamości. Poza tym często przesyłamy nim różne poufne informacje. Katastrofą byłoby przejęcie naszego konta email, bo wtedy atakujący mógłby zalogować się do innych stron w których jesteśmy zarejestrowani na ten adres, podszywać się pod nas i wyrządzić duże szkody. Dostawcy email, jak Gmail, Onet, WP czy Outlook też mogą czytać wasze maile bez waszej wiedzy i zgody (i prawdopodobnie to robią). W dzisiejszym artykule, jak zapowiedziałem, opowiem o szyfrowaniu wiadomości, tak że nikt poza odbiorcą nie będzie w stanie jej odczytać.
 
 ### [Integracja telefonu z komputerem](integracja-telefonu-z-komputerem.md)
 
@@ -24,7 +31,6 @@
 *24.03.2021*
 
 > Pamięć wymiany, to rozszerzenie pamięci RAM o część fizycznej pamięci na dysku twardym. Obie pamięci są ze sobą połączone. Dzięki temu na komputerze można uruchomić bardziej zasobożerne programy lub sprawić, że stary komputer będzie działał lepiej. W dzisiejszym artykule opowiem, w jaki sposób rozszerzyć pamięć w systemie Linux (funkcjonalność kernela).
->
 
 ### [System plików Linuxa](system-plików-linuxa.md)
 
@@ -37,5 +43,4 @@
 *16.03.2021*
 
 > Witajcie na moim blogu poświęconym tematyce GNU/Linuxa i programowania, a to jest pierwszy artykuł w którym opowiem o tym, czym jest GNU/Linux, dlaczego warto się nim zainteresować, oraz jak go zainstalować na swoim komputerze.
->
 
