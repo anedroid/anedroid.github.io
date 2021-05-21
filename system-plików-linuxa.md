@@ -35,7 +35,7 @@ W Linuxie każdy plik posiada metadane o ich właścicielu oraz uprawnieniach kt
 
 Uprawnienia te występują w 3 grupach: dla właściciela, grupy i innych użytkowników. Plik może należeć do tylko jednej grupy. Uprawnienia zapisywane są w jednej z dwóch form: zapisie literowym, oraz ósemkowym. Osobiście preferuję pierwszy format.
 
-![zapis literowy](https://www.bezkompilatora.pl/wp-content/gallery/2018-07-02-linuxowy-system-plikow/uprawnienia.jpg)
+![zapis literowy](images/system-plików-linuxa_1.jpg)
 
 ```
 $ ls -l /

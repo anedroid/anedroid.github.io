@@ -175,7 +175,7 @@ Cóż... musimy się przyzwyczaić, że przy każdym starcie i zatrzymywaniu us�
 
 Po zainstalowaniu serwera apache2 możecie wpisać w przeglądarkę adres [localhost](http://localhost) lub [127.0.0.1](http://127.0.0.1). Powinna się wyświetlić taka strona:
 
-![Screenshot XAMPP-a](images/serwer-www-w-systemie-gnu-linux_2.png)
+![Domyślna strona Apache2](images/serwer-www-w-systemie-gnu-linux_2.png)
 
 Lokalizacja plików www może się różnić w zależności od dystrybucji GNU/Linuxa. W Ubuntu pliki są zlokalizowane w `/var/www/html`. Jeżeli nie możecie znaleźć tego katalogu, sprawdźcie wartość `DocumentRoot` pliku `/etc/apache2/sites-available/000-default.conf`.
 

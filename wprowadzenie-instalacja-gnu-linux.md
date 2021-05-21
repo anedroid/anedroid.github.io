@@ -22,7 +22,7 @@ System operacyjny możecie zainstalować na maszynie wirtualnej lub fizycznie na
 
 Wejdźcie na stronę systemu i pobierzcie stamtąd plik *.iso. Następnie przygotujcie program do nagrywania obrazów iso, na przykład popularny wśród użytkowników Windowsa [Rufus](https://rufus.ie/) (nie wymaga instalacji). Podłączcie pendrive i upewnijcie się, że nie skasujecie na nim ważnych danych. Po uruchomieniu Rufusa powinno się wyświetlić takie okno:
 
-![okno Rufusa](https://rufus.ie/pics/rufus_pl.png)
+![okno Rufusa](images/wprowadzenie-instalacja-gnu-linux_1.png)
 
 Wybierzcie urządzenie i obraz dysku. Najczęściej pozostałe opcje możecie pozostawić bez zmian. Po wciśnięciu "start" powinna rozpocząć się procedura formatowania i nagrywania obrazu. Po jej zakończeniu zrestartujcie komputer pozostawiając pendrive w porcie USB.
 
@@ -30,7 +30,7 @@ Wybierzcie urządzenie i obraz dysku. Najczęściej pozostałe opcje możecie po
 
 Instalator powinien wystartować automatycznie. Jeżeli jednak tak się nie stało, jeszcze raz zrestartujcie komputer, i w chwili gdy będzie się wyświetlać motherboard naciskajcie klawisz uruchamiający boot menu. Najczęściej będzie to F12, ale może się różnić w zależności od modelu komputera. Wystarczy sprawdzić w internecie, na przykład tu: [https://pl.wikipedia.org/wiki/Program_rozruchowy](https://pl.wikipedia.org/wiki/Program_rozruchowy).
 
-![boot menu](https://cdn1.expertreviews.co.uk/sites/expertreviews/files/2015/08/boot_menu.png?itok=puiPdZ7b)
+![boot menu](images/wprowadzenie-instalacja-gnu-linux_2.png)
 
 Gdy uruchomi się instalator GNU/Linuxa, poprowadzi nas przez proces instalacji krok-po-kroku. Często na tym etapie można już przetestować system w trybie Live CD. Podczas instalacji należy zwrócić szczególną uwagę na sekcję partycjonowania. Partycjonowanie to dzielenie dysku twardego na części o stałym rozmiarze, na których znajdują się system operacyjny i pliki. Partycje mają niezależne systemy plików, a ponad nimi jest system partycjonowania. W popularnym obecnie systemie MBR można utworzyć maksymalnie 4 partycje, ale można ten mechanizm trochę oszukać, stosując tzw. partycje rozszerzone, które z punktu widzenia systemu partycjonowania należą do tej samej partycji, ale system operacyjny widzi je jako oddzielne.
 
@@ -44,7 +44,7 @@ W dalszych ustawieniach możecie utworzyć swoje konto, często z opcją szyfrow
 
 Po zainstalowaniu dystrybucji GNU/Linuxa możecie zrestartować swój komputer i odłączyć pendriva. Przed uruchomieniem systemu na ekranie powinna się wyświetlić lista systemów operacyjnych które możemy uruchomić.
 
-![GRUB](https://upload.wikimedia.org/wikipedia/commons/1/12/GRUB_screenshot.png)
+![GRUB](images/wprowadzenie-instalacja-gnu-linux_3.png)
 
 GNU/Linux będzie na pierwszym miejscu, dalej recovery mode i Windows. Wyświetla się tam również opcja *Memtest*, ale nigdy mi się nie przydała. Program który się właśnie uruchomił, to tzw. *GRUB*. Nie należy on do BIOS-u, tak jak *boot menu*, ale został zainstalowany razem z nowym systemem, dlatego należy uważać aby go nie uszkodzić. Może się to zdarzyć podczas usuwania partycji lub plików w katalogu `/boot` (nie polecam). Można go wprawdzie naprawić używając programu *boot repair*, ale trzeba wiedzieć jak.
 
