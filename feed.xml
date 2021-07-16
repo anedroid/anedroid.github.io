@@ -1,59 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
 	<channel>
 		<title>Anedroid GNU/Linux blog</title>
 		<link>https://anedroid.github.io</link>
 		<description>Mój blog poświęcony tematyce GNU/Linuxa</description>
+		<docs>https://anedroid.github.io/feed.xml</docs>
+		
 		<language>pl</language>
-		<docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+		<pubDate>Fri, 16 Jul 2021 00:00:00 GMT</pubDate>
+		<lastBuildDate>Fri, 16 Jul 2021 00:00:00 GMT</pubDate>
+		
+		<item>
+			<title>Ochrona serwera vs swobodny dostęp do usługi</title>
+			<link>https://anedroid.github.io/ochrona-serwera-vs-swobodny-dostęp-do-usługi.html</link>
+			<guid>ochrona-serwera-vs-swobodny-dostęp-do-usługi</guid>
+			<pubDate>Fri, 16 Jul 2021 00:00:00 GMT</pubDate>
+			<description>O tym jak firmy mające chronić serwery przed atakami DDOS utrudniają lub uniemożliwiają niektórym użytkownikom uzyskać dostęp do cyfrowych treści.</description>
+			<author>Anedroid</author>
+			
+			<media:content url="https://anedroid.github.io/images/ochrona-serwera-vs-swobodny-dostęp-do-usługi.png" medium="image" />
+		</item>
 		<item>
 			<title>Szyfrowanie emaili</title>
 			<link>https://anedroid.github.io/szyfrowanie-emaili.html</link>
 			<guid>szyfrowanie-emaili</guid>
-			<pubDate>Fri, 21 May 2021</pubDate>
+			<pubDate>Fri, 21 May 2021 00:00:00 GMT</pubDate>
 			<description>Dla większości z nas poczta email to taki krytyczny węzeł w tworzonej przez nas mikrosieci połączonych ze sobą kont internetowych, ponieważ za jego pomocą większość serwisów, sklepów i usług oferuje resetowanie hasła i potwierdzanie tożsamości. Poza tym często przesyłamy nim różne poufne informacje. Katastrofą byłoby przejęcie naszego konta email, bo wtedy atakujący mógłby zalogować się do innych stron w których jesteśmy zarejestrowani na ten adres, podszywać się pod nas i wyrządzić duże szkody. Dostawcy email, jak Gmail, Onet, WP czy Outlook też mogą czytać wasze maile bez waszej wiedzy i zgody (i prawdopodobnie to robią). W dzisiejszym artykule, jak zapowiedziałem, opowiem o szyfrowaniu wiadomości, tak że nikt poza odbiorcą nie będzie w stanie jej odczytać.</description>
+			<author>Anedroid</author>
 		</item>
 		<item>
 			<title>Integracja telefonu z komputerem</title>
 			<link>https://anedroid.github.io/integracja-telefonu-z-komputerem.html</link>
 			<guid>integracja-telefonu-z-komputerem</guid>
-			<pubDate>Thu, 22 Apr 2021</pubDate>
+			<pubDate>Thu, 22 Apr 2021 00:00:00 GMT</pubDate>
 			<description>Telefon z komputerem najczęściej łączymy aby: bezproblemowo przesyłać dane między tymi dwoma urządzeniami, sterować komputerem przy użyciu telefonu jak pilotem, albo wyświetlać powiadomienia na dużym ekranie bez odrywania się od pracy. Istnieje wiele różnych programów do realizacji tego celu, a w dzisiejszym artykule przedstawię dwa z nich: KDE Connect, oraz AirDroid. Każdy ma swoje zalety i wady, oraz różni się oferowanym zestawem funkcjonalności.</description>
+			<author>Anedroid</author>
 		</item>
 		<item>
 			<title>Jak zabezpieczyć połączenie SSH?</title>
 			<link>https://anedroid.github.io/jak-zabezpieczy%C4%87-po%C5%82%C4%85czenie-ssh.html</link>
 			<guid>jak-zabezpieczyć-połączenie-ssh</guid>
-			<pubDate>Mon, 5 Apr 2021</pubDate>
+			<pubDate>Mon, 5 Apr 2021 00:00:00 GMT</pubDate>
 			<description>Gdybym chciał zhackować twój komputer, na pewno zacząłbym od próby zalogowania się do powłoki bash przez ssh, a następnie na konto root, skąd mógłbym wyrządzić ogromne szkody. Otwarta usługa ssh to duża wygoda, ale też duże zagrożenie dla bezpieczeństwa. Nie musimy jednak z niej rezygnować, wystarczy zastosować się do tych kilku wskazówek które dzisiaj przedstawię.</description>
+			<author>Anedroid</author>
 		</item>
 		<item>
 			<title>Serwer www w systemie GNU/Linux</title>
 			<link>https://anedroid.github.io/serwer-www-w-systemie-gnu-linux.html</link>
 			<guid>serwer-www-w-systemie-gnu-linux</guid>
-			<pubDate>Sat, 4 Apr 2021</pubDate>
+			<pubDate>Sat, 4 Apr 2021 00:00:00 GMT</pubDate>
 			<description>O ile postawienie prostej strony www na XAMPP-ie w Windowsie jest dosyć proste, to konfiguracja serwerów sieciowych w GNU/Linuxie może na początku sprawiać pewne problemy, między innymi dlatego, że zarządza się nimi wyłącznie z poziomu terminala. W dzisiejszym artykule znowu poznacie kilka komend. Opiszę dokładnie jak zainstalować i skonfigurować serwery apache2, mySQL, DNS, oraz SSL.</description>
+			<author>Anedroid</author>
 		</item>
 		<item>
 			<title>Konfiguracja pamięci wymiany (swap)</title>
 			<link>https://anedroid.github.io/konfiguracja-pami%C4%99ci-wymiany-swap.html</link>
 			<guid>konfiguracja-pamięci-wymiany-swap</guid>
-			<pubDate>Wed, 24 Mar 2021</pubDate>
+			<pubDate>Wed, 24 Mar 2021 00:00:00 GMT</pubDate>
 			<description>Pamięć wymiany, to rozszerzenie pamięci RAM o część fizycznej pamięci na dysku twardym. Obie pamięci są ze sobą połączone. Dzięki temu na komputerze można uruchomić bardziej zasobożerne programy lub sprawić, że stary komputer będzie działał lepiej. W dzisiejszym artykule opowiem, w jaki sposób rozszerzyć pamięć w systemie Linux (funkcjonalność kernela).</description>
+			<author>Anedroid</author>
 		</item>
 		<item>
 			<title>System plików Linuxa</title>
 			<link>https://anedroid.github.io/system-plik%C3%B3w-linuxa.html</link>
 			<guid>system-plików-linuxa</guid>
-			<pubDate>Wed, 17 Mar 2021</pubDate>
+			<pubDate>Wed, 17 Mar 2021 00:00:00 GMT</pubDate>
 			<description>System plików Linuxa to jedno z najważniejszych zagadnień niezbędnych do opanowania aby sprawnie poruszać się po systemie. I jest trochę bardziej złożone zagadnienie niż mogłoby się wydawać, dlatego postaram się je w miarę jasno wytłumaczyć.</description>
+			<author>Anedroid</author>
 		</item>
 		<item>
 			<title>Wprowadzenie - instalacja GNU/Linux</title>
 			<link>https://anedroid.github.io/wprowadzenie-instalacja-gnu-linux.html</link>
 			<guid>wprowadzenie-instalacja-gnu-linux</guid>
-			<pubDate>Tue, 16 Mar 2021</pubDate>
+			<pubDate>Tue, 16 Mar 2021 00:00:00 GMT</pubDate>
 			<description>Witajcie na moim blogu poświęconym tematyce GNU/Linuxa i programowania, a to jest pierwszy artykuł w którym opowiem o tym, czym jest GNU/Linux, dlaczego warto się nim zainteresować, oraz jak go zainstalować na swoim komputerze.</description>
+			<author>Anedroid</author>
 		</item>
 	</channel>
 </rss>

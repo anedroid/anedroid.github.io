@@ -2,6 +2,12 @@
 
 <a href="feed.xml" download>![icon](images/rss-icon.svg)</a> <a href="feed.xml" download>RSS</a>
 
+### [Ochrona serwera vs swobodny dostęp do usługi](ochrona-serwera-vs-swobodny-dostęp-do-usługi.md)
+
+*16.07.2021*
+
+> O tym jak firmy mające chronić serwery przed atakami DDOS utrudniają lub uniemożliwiają niektórym użytkownikom uzyskać dostęp do cyfrowych treści.
+
 ### [Szyfrowanie emaili](szyfrowanie-emaili.md)
 
 *21.05.2021*
