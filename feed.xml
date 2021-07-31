@@ -45,7 +45,7 @@
 			<link>https://anedroid.github.io/jak-zabezpieczy%C4%87-po%C5%82%C4%85czenie-ssh.html</link>
 			<guid>jak-zabezpieczyć-połączenie-ssh</guid>
 			<pubDate>Mon, 5 Apr 2021 00:00:00 GMT</pubDate>
-			<description>Gdybym chciał zhackować twój komputer, na pewno zacząłbym od próby zalogowania się do powłoki bash przez ssh, a następnie na konto root, skąd mógłbym wyrządzić ogromne szkody. Otwarta usługa ssh to duża wygoda, ale też duże zagrożenie dla bezpieczeństwa. Nie musimy jednak z niej rezygnować, wystarczy zastosować się do tych kilku wskazówek które dzisiaj przedstawię.</description>
+			<description>Gdybym chciał włamać się do twojego komputera, na pewno zacząłbym od próby zalogowania się do powłoki bash przez ssh, a następnie na konto root, skąd mógłbym wyrządzić ogromne szkody. Otwarta usługa ssh to duża wygoda, ale też duże zagrożenie dla bezpieczeństwa. Nie musimy jednak z niej rezygnować, wystarczy zastosować się do tych kilku wskazówek które dzisiaj przedstawię.</description>
 			<author>Anedroid</author>
 		</item>
 		<item>

@@ -710,6 +710,10 @@ Protokół http standardowo działa na porcie 80, a https na porcie 443. Szyfrow
 
 Parę kluczy generuje zarówno serwer, jak i klient. Gdy klient chce przesłać wiadomość do serwera, używa jego klucza publicznego do zaszyfrowania wiadomości, a serwer używa swojego klucza prywatnego do odszyfrowania, i odwrotnie. Dzięki takiemu modelowi komunikacji podsłuchiwanie sieci jest prawie niemożliwe. Jedyny sposób to atak typu man-in-the-middle, ale o nim i sposobie zabezpieczenia się napiszę w innym artykule.
 
+> Urząd certyfikacji może przeprowadzić atak man-in-the-middle tworząc fałszywy certyfikat i podpisując go, ale może to zrobić tylko raz. Gdy tylko zostanie na tym przyłapany, zostanie natychmiast unieważniony, a istnieją już mechanizmy automatycznego wyłapywania niebezpiecznych urzędów. O atakach man-in-the-middle opowiem w innym artykule.
+
+*Aktualizacja z 17.07.2021*
+
 Klucz prywatny i zawierający klucz publiczny certyfikat SSL będziemy trzymać w katalogu `/etc/apache2/ssl`. Utwórzcie tam katalog i wygenerujcie parę kluczy. Zostaniecie zapytani o kilka rzeczy na które składać się będzie tożsamość klucza. Możecie je wypełnić według własnego uznania lub nawet zostawić puste, z wyjątkiem "Common Name", gdzie należy wpisać nazwę domeny.
 
 ```
@@ -747,6 +751,19 @@ Wyjaśnię teraz, co to oznacza:
 - -newkey rsa:2048 - wygeneruje klucz 2048-bitowy klucz RSA
 - -keyout - ścieżka do tworzonego pliku klucza prywatnego
 - -out - ścieżka do tworzonego pliku certyfikatu
+
+> Obecnie zaleca się stosowanie algorytmów z [rodziny EC](https://en.wikipedia.org/wiki/Elliptic-curve_cryptography) (ang. *eliptic curve*) zamiast RSA. Kryptografia zawsze musi wyprzedzać stale rosnącą moc obliczeniową komputerów, dlatego co jakiś czas powstają nowe, bezpieczniejsze algorytmy, które trudniej złamać. Klucze EC są krótsze, ale ze względu na specyfikę algorytmu, bezpieczniejsze.
+>
+> Tutaj wygenerowanie certyfikatu składa się z dwóch komend:
+>
+> ```
+> openssl ecparam -genkey -out libremail.key -name prime256v1 # Wygeneruje klucz ECDSA
+> openssl req -x509 -new -key libremail.key -out libremail.crt # Wygeneruje certyfikat i podpisze go
+> ```
+> 
+> Dla mnie składnia openssl jest dość skomplikowana, dlatego kiedyś zrobię o tym osobny artykuł.
+
+*Aktualizacja z 31.07.2021*
 
 Program openssl wygeneruje 2 pliki, z których jeden - klucz prywatny - będzie zabezpieczony przed odczytem. Teraz włączymy nowo utworzony certyfikat do serwera apache2. Otwórzcie plik konfiguracji wirtualnego hosta, np. `/etc/apache2/sites-available/libremail.conf`. Dodajcie na końcu drugi host.
 

@@ -2,7 +2,7 @@
 
 # Jak zabezpieczyć połączenie SSH?
 
-Gdybym chciał zhackować twój komputer, na pewno zacząłbym od próby zalogowania się do powłoki bash przez ssh, a następnie na konto root, skąd mógłbym wyrządzić ogromne szkody. Otwarta usługa ssh to duża wygoda, ale też duże zagrożenie dla bezpieczeństwa. Nie musimy jednak z niej rezygnować, wystarczy zastosować się do tych kilku wskazówek które dzisiaj przedstawię.
+Gdybym chciał włamać się do twojego komputera, na pewno zacząłbym od próby zalogowania się do powłoki bash przez ssh, a następnie na konto root, skąd mógłbym wyrządzić ogromne szkody. Otwarta usługa ssh to duża wygoda, ale też duże zagrożenie dla bezpieczeństwa. Nie musimy jednak z niej rezygnować, wystarczy zastosować się do tych kilku wskazówek które dzisiaj przedstawię.
 
 Główna konfiguracja ssh znajduje się w pliku `/etc/ssh/sshd_config`. Po wprowadzeniu każdej zmiany przeładuj serwer ssh za pomocą:
 
